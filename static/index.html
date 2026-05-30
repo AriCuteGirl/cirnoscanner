@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mocha Scanner</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-mark">MS</span>
+        <div>
+          <h1>Mocha Scanner</h1>
+          <p>Domain and file discovery</p>
+        </div>
+      </div>
+
+      <nav class="mode-tabs" aria-label="Scanner mode">
+        <button class="mode-tab active" data-mode="subdomain">Subdomains</button>
+        <button class="mode-tab" data-mode="files">Deep files</button>
+      </nav>
+
+      <section class="filters" id="fileFilters">
+        <div class="section-title">File filters</div>
+        <label class="check-row"><input type="checkbox" value="media" /> Media</label>
+        <label class="check-row"><input type="checkbox" value="audio" /> Audio</label>
+        <label class="check-row"><input type="checkbox" value="images" checked /> Images</label>
+        <label class="check-row"><input type="checkbox" value="archives" /> Archives</label>
+        <label class="check-row"><input type="checkbox" value="documents" checked /> Documents</label>
+        <label class="check-row"><input type="checkbox" value="web" /> Web files</label>
+        <label class="check-row"><input id="everything" type="checkbox" /> Everything</label>
+        <input id="customExt" class="mini-input" placeholder="Custom: log, bak, yaml" />
+      </section>
+    </aside>
+
+    <main class="app">
+      <section class="toolbar">
+        <div class="scan-panel active" id="subdomainPanel">
+          <label for="domainInput">Root domain</label>
+          <div class="input-line">
+            <input id="domainInput" autocomplete="off" spellcheck="false" placeholder="example.com" />
+            <button id="subdomainScan">Scan</button>
+          </div>
+        </div>
+
+        <div class="scan-panel" id="filesPanel">
+          <label for="urlInput">Base URL</label>
+          <div class="input-line">
+            <input id="urlInput" autocomplete="off" spellcheck="false" placeholder="https://example.com/" />
+            <button id="fileScan">Scan</button>
+          </div>
+          <div class="inline-options">
+            <label><input id="crawl" type="checkbox" checked /> Crawl</label>
+            <label><input id="brute" type="checkbox" checked /> Brute force</label>
+            <label>Depth <input id="depth" type="number" min="0" max="5" value="2" /></label>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="ghost" data-export="csv">CSV</button>
+          <button class="ghost" data-export="txt">TXT</button>
+          <button class="ghost" data-export="json">JSON</button>
+          <button class="ghost media-export" data-export-media="video">Media URLs</button>
+          <button class="ghost media-export" data-export-media="image">Image URLs</button>
+          <button class="danger" id="stopScan">Stop</button>
+        </div>
+      </section>
+
+      <section class="progress-wrap">
+        <div class="progress-header">
+          <span id="scanState">Idle</span>
+          <span id="elapsed">0.0s</span>
+        </div>
+        <div class="progress"><span id="progressBar"></span></div>
+        <div class="stat-grid">
+          <div><span id="checked">0</span><small>checked</small></div>
+          <div><span id="found">0</span><small>found</small></div>
+          <div><span id="rate">0.0</span><small>req/s</small></div>
+          <div><span id="total">0</span><small>planned</small></div>
+        </div>
+      </section>
+
+      <section class="table-shell">
+        <table id="subdomainTable" class="results-table active">
+          <thead>
+            <tr>
+              <th>Subdomain</th>
+              <th>IP</th>
+              <th>Status</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+
+        <table id="filesTable" class="results-table">
+          <thead>
+            <tr>
+              <th>URL</th>
+              <th>Status</th>
+              <th>Type</th>
+              <th>Size</th>
+              <th>Ext</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <div class="empty" id="emptyState">No results yet</div>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
