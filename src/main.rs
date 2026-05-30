@@ -1,7 +1,7 @@
 mod scanner;
 mod wordlists;
 
-use std::{convert::Infallible, net::SocketAddr, time::Duration};
+use std::{convert::Infallible, env, net::SocketAddr, time::Duration};
 
 use axum::{
     Json, Router,
@@ -53,7 +53,11 @@ async fn main() -> anyhow::Result<()> {
         .fallback_service(ServeDir::new("static").append_index_html_on_directories(true))
         .layer(TraceLayer::new_for_http());
 
-    let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
+    let port = env::var("PORT")
+        .ok()
+        .and_then(|value| value.parse().ok())
+        .unwrap_or(3000);
+    let addr = SocketAddr::from(([0, 0, 0, 0], port));
     let listener = tokio::net::TcpListener::bind(addr).await?;
     println!("Domain scanner listening on http://{addr}");
     axum::serve(listener, app).await?;
